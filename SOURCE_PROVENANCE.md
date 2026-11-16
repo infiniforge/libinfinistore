@@ -1,6 +1,6 @@
 # Source provenance
 
-Extracted structurally from [gretchycat/infinifolder](https://github.com/gretchycat/infinifolder) baseline 9233495, after compatibility checkpoint b893dfd. Original packages/JNI names and notices are retained. Historical commits remain in the upstream repository; the table records original source paths and SHA-256 at extraction. No codec or filesystem rewrite is part of this move. Root licensing is pending; see LICENSE.md.
+Extracted structurally from [gretchycat/infinifolder](https://github.com/gretchycat/infinifolder) baseline 9233495, after compatibility checkpoint b893dfd. Original packages/JNI names and notices are retained. Historical commits remain in the upstream repository; the table records original source paths and SHA-256 at extraction. No codec or filesystem rewrite is part of this move. Original libinfinistore code is licensed under MIT; third-party components retain their own terms.
 
 | Original path | Extracted path | Original SHA-256 |
 | --- | --- | --- |
