@@ -53,7 +53,7 @@ tests invoke actual services/parsers rather than scripted success responses.
 
 ## New format modules
 
-New Store format detectors must validate content through bounded magic or a real parser and expose available parsed metadata through `MetadataCapabilityHandler`; URI/provider reachability is a separate capability. If a format has no reliable in-band discriminator, report an extension association as a candidate. Follow the shared [Stream conformance rule](../libinfinistream/CAPABILITIES.md#format-module-validation-and-metadata-requirements).
+New Store format detectors must validate content through bounded magic or a real parser and expose available parsed metadata through `MetadataCapabilityHandler`; URI/provider reachability is a separate capability. If a format has no reliable in-band discriminator, report an extension association as a candidate. Follow the shared [Stream conformance rule](https://github.com/infiniforge/libinfinistream/blob/main/CAPABILITIES.md#format-module-validation-and-metadata-requirements).
 
 ## Host audit record
 
