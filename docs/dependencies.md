@@ -12,3 +12,13 @@ obligations continue to apply.
 Android Uri/SAF and storage services remain in store-android. Separating a pure
 resource model module is a later compatibility checkpoint, not an implicit claim
 that these Android implementations already run on desktop or iOS.
+
+## SFTP resource URI construction
+
+Store 0.1.1 constructs SFTP resource URIs from a decoded remote path using
+component-aware percent encoding. A display filename such as
+`Awesome Golf (1991).lnx` becomes `Awesome%20Golf%20(1991).lnx` in its URI. The
+connection ID and path separators retain their roles. Literal percent signs,
+query/fragment characters and Unicode are quoted as filename content. Reading
+`Uri.path` decodes the remote path once; parent navigation rebuilds it without
+double encoding. Call `SftpUri.build` with a filesystem path, not an encoded URI.

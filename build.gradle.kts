@@ -3,4 +3,4 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.2.20" apply false
     id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
 }
-allprojects { group = "io.github.gretchycat.libinfinistore"; version = "0.1.0" }
+allprojects { group = "io.github.gretchycat.libinfinistore"; version = "0.1.1" }

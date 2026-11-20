@@ -73,4 +73,41 @@ class SftpUriTest {
         assertFalse(SftpUri.isSftpUri(TestUri("content://com.android.providers/doc")))
         assertFalse(SftpUri.isSftpUri(TestUri("apps://installed")))
     }
+    private fun useDecodedPathLikeAndroid() {
+        SftpUri.uriFactory = { text -> object : TestUri(text) {
+            override fun getPath(): String = java.net.URI(text).path
+        } }
+    }
+
+    @Test
+    fun filenamesWithSpacesAreEncodedWhileConnectionAndDirectoriesStayIntact() {
+        useDecodedPathLikeAndroid()
+        val path = "/srv/1TB/MultiMedia/Emulation/ROMS/Console/Atari/atarilynx/LynxRen/Awesome Golf (1991).lnx"
+        val uri = SftpUri.build("conn-123", path)
+        assertEquals("sftp://conn-123/srv/1TB/MultiMedia/Emulation/ROMS/Console/Atari/atarilynx/LynxRen/Awesome%20Golf%20(1991).lnx", uri.toString())
+        assertEquals("conn-123", SftpUri.getConnectionId(uri))
+        assertEquals(path, SftpUri.getRemotePath(uri))
+    }
+
+    @Test
+    fun reservedFilenameCharactersAndUnicodeDecodeExactlyOnce() {
+        useDecodedPathLikeAndroid()
+        val path = "/games/100%20 +#?[β].lnx"
+        val uri = SftpUri.build("conn-123", path)
+        assertFalse(uri.toString().contains(' '))
+        assertEquals(path, java.net.URI(uri.toString()).path)
+        assertEquals(path, SftpUri.getRemotePath(uri))
+        assertTrue(uri.toString().contains("100%2520"))
+        assertNull(java.net.URI(uri.toString()).query)
+        assertNull(java.net.URI(uri.toString()).fragment)
+    }
+
+    @Test
+    fun encodedParentDirectoriesAreNotDoubleEncodedWhenNavigatingUp() {
+        useDecodedPathLikeAndroid()
+        val uri = SftpUri.build("conn-123", "/rom sets/Atari/Awesome Golf.lnx")
+        assertEquals("sftp://conn-123/rom%20sets/Atari", SftpUri.getParentUri(uri).toString())
+        assertEquals("sftp://conn-123/rom%20sets", SftpUri.getParentUri(SftpUri.getParentUri(uri)!!).toString())
+    }
+
 }
