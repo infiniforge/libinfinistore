@@ -20,8 +20,11 @@ object SftpUri {
         val pathPart = if (cleanPath.startsWith("/")) cleanPath else "/$cleanPath"
         // remotePath is a decoded filesystem path, not an already encoded URI.
         // Quote that component once so spaces, percent signs, '?' and '#' stay in filenames.
-        val encoded = java.net.URI(SCHEME_SFTP, connectionId, pathPart, null, null).toASCIIString()
-        return uriFactory(encoded)
+        // Encode UTF-8 without Unicode normalization; distinct remote names stay distinct.
+        val encodedPath = java.net.URLEncoder.encode(pathPart, Charsets.UTF_8.name())
+            .replace("+", "%20")
+            .replace("%2F", "/")
+        return uriFactory("$SCHEME_SFTP://$connectionId$encodedPath")
     }
 
     fun isSftpUri(uri: Uri): Boolean {

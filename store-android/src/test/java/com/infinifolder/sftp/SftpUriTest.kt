@@ -84,7 +84,7 @@ class SftpUriTest {
         useDecodedPathLikeAndroid()
         val path = "/srv/1TB/MultiMedia/Emulation/ROMS/Console/Atari/atarilynx/LynxRen/Awesome Golf (1991).lnx"
         val uri = SftpUri.build("conn-123", path)
-        assertEquals("sftp://conn-123/srv/1TB/MultiMedia/Emulation/ROMS/Console/Atari/atarilynx/LynxRen/Awesome%20Golf%20(1991).lnx", uri.toString())
+        assertEquals("sftp://conn-123/srv/1TB/MultiMedia/Emulation/ROMS/Console/Atari/atarilynx/LynxRen/Awesome%20Golf%20%281991%29.lnx", uri.toString())
         assertEquals("conn-123", SftpUri.getConnectionId(uri))
         assertEquals(path, SftpUri.getRemotePath(uri))
     }
@@ -108,6 +108,16 @@ class SftpUriTest {
         val uri = SftpUri.build("conn-123", "/rom sets/Atari/Awesome Golf.lnx")
         assertEquals("sftp://conn-123/rom%20sets/Atari", SftpUri.getParentUri(uri).toString())
         assertEquals("sftp://conn-123/rom%20sets", SftpUri.getParentUri(SftpUri.getParentUri(uri)!!).toString())
+    }
+
+    @Test
+    fun filenameEncodingKeepsUnicodeSpellingAndEscapesExclamationMarks() {
+        useDecodedPathLikeAndroid()
+        val path = "/games/Cafe\u0301 Golf! +100%.lnx"
+        val uri = SftpUri.build("conn-123", path)
+        assertEquals(path, SftpUri.getRemotePath(uri))
+        assertTrue(uri.toString().contains("%21"))
+        assertTrue(uri.toString().contains("%2B100%25"))
     }
 
 }

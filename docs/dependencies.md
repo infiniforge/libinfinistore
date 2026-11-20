@@ -17,8 +17,12 @@ that these Android implementations already run on desktop or iOS.
 
 Store 0.1.1 constructs SFTP resource URIs from a decoded remote path using
 component-aware percent encoding. A display filename such as
-`Awesome Golf (1991).lnx` becomes `Awesome%20Golf%20(1991).lnx` in its URI. The
+`Awesome Golf (1991).lnx` becomes `Awesome%20Golf%20%281991%29.lnx` in its URI. The
 connection ID and path separators retain their roles. Literal percent signs,
 query/fragment characters and Unicode are quoted as filename content. Reading
 `Uri.path` decodes the remote path once; parent navigation rebuilds it without
 double encoding. Call `SftpUri.build` with a filesystem path, not an encoded URI.
+
+Path encoding preserves UTF-8 filename spelling, including decomposed Unicode;
+it does not normalize distinct remote names. Exclamation marks become `%21`,
+and literal plus/percent characters remain filename content after one decode.
